@@ -1,9 +1,10 @@
 require_relative "../config/environment.rb"
+require 'pry'
 
 class Game
   attr_accessor :board, :player_1, :player_2
 
-  WIN_COMBINATIONS = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
+  @@WIN_COMBINATIONS = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
 
   def initialize(player_1=nil, player_2=nil, board=nil)
     if board == nil
@@ -51,6 +52,7 @@ class Game
     game_over = over?
     while counter < 9
       counter += 1
+      sleep(1)
       if game_over == false
           turn
           game_over = over?
@@ -80,6 +82,7 @@ class Game
     input = player.move(@board)
     if @board.valid_move?(input)
       @board.update(input, player)
+      @board.display
     else
       player.move(@board)
     end
@@ -97,7 +100,7 @@ class Game
   def won?
     if winner != nil
       winning_combo = []
-      WIN_COMBINATIONS.each do |combo|
+      @@WIN_COMBINATIONS.each do |combo|
         if @board.cells[combo[0]] == "X" && @board.cells[combo[1]] == "X" && @board.cells[combo[2]] == "X"
           winning_combo = combo
           break
@@ -122,7 +125,7 @@ class Game
 
   def winner
     game_winner = nil
-    WIN_COMBINATIONS.each do |combo|
+    @@WIN_COMBINATIONS.each do |combo|
       if @board.cells[combo[0]] == "X" && @board.cells[combo[1]] == "X" && @board.cells[combo[2]] == "X"
         game_winner = "X"
       elsif @board.cells[combo[0]] == "O" && @board.cells[combo[1]] == "O" && @board.cells[combo[2]] == "O"
